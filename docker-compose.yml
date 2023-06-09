@@ -1,0 +1,39 @@
+version: "3" # 도커 컴포즈 버전
+
+services:
+  demo_mysql8:
+    image: mysql:8.0
+    # DB 설치하고 나서 설정 맞춰 줘야 하는 것들도 여기에 미리 다 적어 놓으면, 설정 안 만져도 돼서 좋아요. 좋아요!
+    command: # 마이에스큐엘 공식 이미지에게 주는 속성이니까 거기 가서 찾아 보면 나오고
+      - --default-authentication-plugin=mysql_native_password
+      - --character-set-server=utf8mb4 # UTF8 + 이모지(emoji)
+      - --collation-server=utf8mb4_unicode_ci
+      - --range_optimizer_max_mem_size=16777216 # 인덱스에 대해 한 번에 사용하는 공간 같은 건데 최적화 개념이니까 몰라도 돼요.
+    environment:
+      MYSQL_DATABASE: demo
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_HOST: "%"
+      TZ: Asia/Seoul
+    ports:
+      - 3307:3306 # 로컬 3307 to 도커 컨테이너 3306
+    restart: on-failure
+    volumes: # 로컬경로:도커컨테이너경로  둘이 공유되는 공간인데
+      - sticky_volume:/var/lib/mysql # 여기는 볼륨 컨테이너 쓴 거예요
+      - ./config/:/docker-entrypoint-initdb.d/ # 여기(./config/...) SQL 넣으면 기본적으로 실행되긴 하는데, 우린 플라이웨이 쓰니까 무쓸모.
+    # 플라이웨이로만 하는 게 나아요.넵 그럼 이건 지워도 상관없는 건가요? 지워도 되긴 할 거 같은데 안 지우는 건
+    # 나중에 활용하고 싶을 때 다시 검색하기 빡세서.아하넵!
+
+# 볼륨 컨테이너 이건 나중에 찾아 보세요. 찾아 봐야 이해하실 듯.
+volumes:
+  sticky_volume: # 이름은 맘대로 지으면 돼요. 오..
+
+# 접속 정보:
+#   host/port:  localhost:3007/demo
+#   DB name:    demo
+#   user:       root
+#   password:   root
+
+# 이 파일은 처음에 그냥 한 명이 작성해 놓으면
+# 다른 사람들은 리드미 파일에 정보 다 적어 놓은 거 보고 하면 돼요.
+
+# 일단 실행이 된다는 전제로 그냥 코드만 칠게요
