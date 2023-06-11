@@ -2,7 +2,9 @@ package com.example.demo.jpa.repository;
 
 import com.example.demo.jpa.entity.MemberEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -11,29 +13,42 @@ import java.util.List;
 public interface MemberRepository extends JpaRepository<MemberEntity, Long> { // Generic: <ENTITY, ID>
     // 아무것도 안 해도 기본적인 건 있어요.
     // 컨트롤+아이 눌러서 뜬 방금 목록은 그냥 쓸 수 있는 목록이고
+    MemberEntity findById(int id);
+
     MemberEntity findByUsername(String username);
+
     List<MemberEntity> findByUsernameAndEmail(String username, String email); // 이렇게 그냥 인텔리제이가 잘 알긴 해요.
 
     boolean existsByEmail(String email); // 이미 존재하는 이메일입니다.
+
     boolean existsByUsernameOrEmail(String username, String email); // 이미 존재하는 계정 또는 이메일입니다.
     // 이렇게 쓰기만 해도 다 되구요
 
-    @Query("select mem from MemberEntity mem where mem.username = ?1") // 이거도 아이디이 문제인 듯? 아마 나중에 다시 켜면 될 거예요.
-    // 네이티브 쿼리랑 차이가 있죠. 이 덕분에 디비 맘대로 바꿔도 영향 안 받아요.
-    // 이 어노테이션 쓰면 원하는 조인이나 원하는 복잡한 쿼리도, 따로 마이바티스처럼 쓸 수 있어서
-    // 내가 모르겠는 부분이 있다 -> 그냥 이런 어노테이션으로 급하게 처리해도 돼요. 아하
-    // 근데 진짜 네이티브 쿼리랑 차이가 있어서 헷갈려요 저희는
-    // select * from member where username = 1; 이런식으로 썼었는데 mem도 갑자기 튀어나오고..
-    // 앨리어스 거의 안 써 봤죠. 네
-    // 네이티브 쿼리 쓸 때도
-    // select mem.* from member mem where mem.username = ... 이렇게 Alias 달아서 사용 가능해요.
-    // 아 뭔가 기억이 날것같아요 이러면 컬럼명이 저렇게 바뀌어서 나왔던걳가틍ㄴ데..
-    // 여기선 엔티티 클래스(자바) 기준으로 작성이 돼요.
+    @Query("select mem from MemberEntity mem where mem.username = ?1")
+        // 이거도 아이디이 문제인 듯? 아마 나중에 다시 켜면 될 거예요.
+        // 네이티브 쿼리랑 차이가 있죠. 이 덕분에 디비 맘대로 바꿔도 영향 안 받아요.
+        // 이 어노테이션 쓰면 원하는 조인이나 원하는 복잡한 쿼리도, 따로 마이바티스처럼 쓸 수 있어서
+        // 내가 모르겠는 부분이 있다 -> 그냥 이런 어노테이션으로 급하게 처리해도 돼요. 아하
+        // 근데 진짜 네이티브 쿼리랑 차이가 있어서 헷갈려요 저희는
+        // select * from member where username = 1; 이런식으로 썼었는데 mem도 갑자기 튀어나오고..
+        // 앨리어스 거의 안 써 봤죠. 네
+        // 네이티브 쿼리 쓸 때도
+        // select mem.* from member mem where mem.username = ... 이렇게 Alias 달아서 사용 가능해요.
+        // 아 뭔가 기억이 날것같아요 이러면 컬럼명이 저렇게 바뀌어서 나왔던걳가틍ㄴ데..
+        // 여기선 엔티티 클래스(자바) 기준으로 작성이 돼요.
     List<MemberEntity> 난가끔_내쪼대로_짓는다(String username);
 
     List<MemberEntity> findAll();
 
+    // 유저 삭제
     int deleteByUsername(String username);
+
+    List<MemberEntity> findByusername(String username);
+
+    // 유저 닉네임 수정
+//    @Modifying
+//    @Query("UPDATE member m SET m.nickname = :nickname WHERE m.id = :id")
+//    int updateUserNickname(@Param("id") int id, @Param("nickname") String nickname);
 }
 
 // 인터페이스끼리는 원래 extends 쓰니까 신경쓰지 말구요

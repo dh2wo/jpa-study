@@ -25,7 +25,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
     // mysql
-    implementation 'com.mysql:mysql-connector-j:8.0.32'
+    implementation 'com.mysql:mysql-connector-j'
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
@@ -43,12 +43,4 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
-}
-
-repositories {
-    mavenCentral()
-    // Flyway Repository 추가
-    maven {
-        url 'https://repo1.maven.org/maven2'
-    }
 }

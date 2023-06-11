@@ -10,7 +10,7 @@ services:
       - --collation-server=utf8mb4_unicode_ci
       - --range_optimizer_max_mem_size=16777216 # 인덱스에 대해 한 번에 사용하는 공간 같은 건데 최적화 개념이니까 몰라도 돼요.
     environment:
-      MYSQL_DATABASE: demo
+      MYSQL_DATABASE: demo-jpa-basic
       MYSQL_ROOT_PASSWORD: root
       MYSQL_ROOT_HOST: "%"
       TZ: Asia/Seoul
